@@ -10,13 +10,8 @@ script_dir = path.dirname(script_path)       # gets the file path of this script
 audio_file_name = 'chirp1.wav'
 audio_file_path = path.join(script_dir, audio_file_name) # creates filepath for audio file to be opened
 
-
-speech_hotkey = 'ctrl+alt+space'
-
-
 def chirp():
     winsound.PlaySound(audio_file_path, winsound.SND_FILENAME)
-
 
 # function to capture speaking and convert it text
 def talk_to_text():
@@ -44,12 +39,15 @@ def talk_to_text():
         print("something went wrong")
 
 
+speech_hotkey = 'ctrl+alt+space'
+
 # main program loop
 print('Welcome!')
+print(f'press [{speech_hotkey}] to type with your voice!')
+print('say "hotkey" to change the hotkey which acesses the speech dictation')
+
 while True:
     print()
-    print(f'press [{speech_hotkey}] to type with your voice!')
-    print('say "hotkey" to change the hotkey which acesses the speech dictation')
     keyboard.wait(hotkey = speech_hotkey)
     speech_input = talk_to_text()
     if speech_input == 'hotkey':
