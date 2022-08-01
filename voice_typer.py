@@ -24,7 +24,7 @@ class TalkToText:
 
     with m as source:                           # use the default microphone as the audio source
         r.energy_threshold = 300                # adjust this float number to adjust microphone sensitivity for picking up audio
-        r.adjust_for_ambient_noise(source)      # listen for 1 second to calibrate the energy threshold for ambient noise levels
+        r.adjust_for_ambient_noise(source, duration = 1)    # listen for 1 second to calibrate the energy threshold for ambient noise levels
         r.dynamic_energy_threshold = False      # set this to True when you're in a place with changing background noisy levels
         r.pause_threshold = 0.8                 # the the minimum length of silence (in seconds) that will register as the end of a phrase
 
@@ -50,7 +50,7 @@ class TalkToText:
         print()
         print('wait for the sound before speaking...')
         # starts the background listening
-        self.do = self.r.listen_in_background(self.m, self.recognize_audio)
+        self.voice_typing = self.r.listen_in_background(self.m, self.recognize_audio)
         chirp()                             # to let users know that the program is now listening
         print()
         print(f"minimum energy threashhold for microphone set to {self.r.energy_threshold}")
@@ -61,14 +61,14 @@ class TalkToText:
         print()
         self.listening = False
         print("Stopping Listening")
-        self.do(wait_for_stop=False)        # stops the background listening
+        self.voice_typing(wait_for_stop=False)        # stops the background listening
         print()
         print(main_message)
 
 
 def text_to_typing(text):
     if isinstance(text, str):               # checks if speech_input is a string - avoids errors from exceptions
-        formated_text = f"{text}, "
+        formated_text = f"{text} "          # adds a space after each typed statement
         keyboard.write(formated_text)       # types with the keyboard
     else:
         print('ERROR')
