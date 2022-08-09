@@ -22,12 +22,6 @@ class TalkToText:
     r = sr.Recognizer()
     m = sr.Microphone()
 
-    with m as source:                           # use the default microphone as the audio source
-        r.energy_threshold = 300                # adjust this float number to adjust microphone sensitivity for picking up audio
-        r.adjust_for_ambient_noise(source, duration = 1)    # listen for 1 second to calibrate the energy threshold for ambient noise levels
-        r.dynamic_energy_threshold = False      # set this to True when you're in a place with changing background noisy levels
-        r.pause_threshold = 0.8                 # the the minimum length of silence (in seconds) that will register as the end of a phrase
-
     def recognize_audio(self, recognizer_instance, audio):
         try:
             # for testing purposes, we're just using the default API key
@@ -49,11 +43,18 @@ class TalkToText:
         self.listening = True
         print()
         print('wait for the sound before speaking...')
+
+        with self.m as source:                           # use the default microphone as the audio source
+            self.r.energy_threshold = 300                # adjust this float number to adjust microphone sensitivity for picking up audio
+            self.r.adjust_for_ambient_noise(source, duration = 1)    # listen for 1 second to calibrate the energy threshold for ambient noise levels
+            self.r.dynamic_energy_threshold = False      # set this to True when you're in a place with changing background noisy levels
+            self.r.pause_threshold = 0.8                 # the the minimum length of silence (in seconds) that will register as the end of a phrase
+        print()
+        print(f"minimum energy threashhold for microphone set to {self.r.energy_threshold}")
+
         # starts the background listening
         self.voice_typing = self.r.listen_in_background(self.m, self.recognize_audio)
         chirp()                             # to let users know that the program is now listening
-        print()
-        print(f"minimum energy threashhold for microphone set to {self.r.energy_threshold}")
         print()
         print("Say something!")
     
@@ -100,8 +101,8 @@ print('Welcome!')
 print()
 print(main_message)
 
+# blocks the program indefinitely
 while True:
-    # blocks the program indefinitely
     keyboard.wait()
 
 
